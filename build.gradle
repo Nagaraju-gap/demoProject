@@ -35,7 +35,7 @@ dependencies {
 
 artifactory {
 
-    contextUrl = 'http://localhost:81/artifactory'
+    contextUrl = System.getenv()['ARTIFACTORY_URL']
     publish {
         repository {
             repoKey = 'gradle-dev-local'
