@@ -4,11 +4,15 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		jcenter()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
 	}
 }
+
+apply plugin: "com.jfrog.artifactory"
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -28,3 +32,18 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+artifactory {
+
+    contextUrl = 'http://localhost:81/artifactory'
+    publish {
+        repository {
+            repoKey = 'gradle-dev-local'
+            username = System.getenv()['ARTIFACTORY_USERNAME']
+            password = System.getenv()['ARTIFACTORY_PASSWORD']
+        }
+    }
+}
+
+artifactoryPublish.dependsOn bootRepackage
+
